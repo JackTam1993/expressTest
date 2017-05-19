@@ -9,24 +9,6 @@ var server = require('http').createServer(thisapp);
 var io = require('socket.io')(server);
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-  host:'localhost',
-  user:'jack',
-  password:'JIAjie11',
-  database:'mysql'
-});
-
-connection.connect();
-
-connection.query('select person_name from `person_info` where person_id = 1',function(err, rows, fields){
-  if(err){
-    throw err;
-  }
-  console.log(rows);
-});
-
-connection.end();
-
 io.on('connection',function () {
   console.log('gg');
 });

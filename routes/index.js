@@ -17,4 +17,8 @@ router.get('/',function (req,res,next) {
   console.log(3);
 });
 
+router.get('/gg/jack',function (req,res,next) {
+    res.json(200,{result:{name:"jack"}});
+});
+
 module.exports = router;
