@@ -11,7 +11,12 @@ router.post('/',function (req,res) {
 });
 
 router.get('/coupon-data',function(req,res) {
-    res.json(200,{result:CouponApi.getCouponData()});
+    CouponApi.getCouponData().then(function (data) {
+        res.status(200).json({result:data});
+    },function (err) {
+        res.status(300).json({result:err});
+    })
+
 });
 
 module.exports = router;

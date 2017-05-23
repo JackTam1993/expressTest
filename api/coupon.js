@@ -1,21 +1,17 @@
 var mysql = require('mysql');
+var query = require('../mysql');
 
 class CouponApi{
     getCouponData() {
-        let connection = mysql.createConnection({
-            host:'***',
-            user:'***',
-            password:'***',
-            database:'***'
-        });
-        connection.connect();
-        connection.query('select coupon_data from `al_aud_wallet`',function(err, rows, fields){
-            if(err){
-                throw err;
-            }
-            return rows;
-        });
-        connection.end();
+        return new Promise(function (resolve,reject) {
+            query('select coupon_data from `al_aud_wallet`',function(err, rows, fields){
+                if(err){
+                    reject(err)
+                }
+                resolve(rows);
+            });
+        })
+
     }
 }
-export default CouponApi();
+module.exports = new CouponApi();
