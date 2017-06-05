@@ -9,6 +9,7 @@ var server = require('http').createServer(thisapp);
 var io = require('socket.io')(server);
 var mysql = require('mysql');
 
+
 io.on('connection',function () {
   console.log('gg');
 });
@@ -20,12 +21,15 @@ io.sockets.on('connection',function (socket) {
   })
 });
 
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var postUser = require('./routes/postUser');
 
-var app = express();
 app.listen(3001);
 
 // view engine setup
@@ -35,9 +39,6 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
