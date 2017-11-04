@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-Type" content="text/html">
+    <title>围棋</title>
+</head>
+<body>
+    <div>
+        <canvas id="myCanvas"  width="1000px" height="1000px"></canvas>
+    </div>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.1.0/jquery.js"></script>
+<script src="https://cdn.bootcss.com/socket.io/1.7.3/socket.io.js"></script>
+<script>
+    $(function () {
+        var myCanvas = document.getElementById('myCanvas');
+        var context= myCanvas.getContext('2d');
+        var isWhite = true;
+        var socket = io.connect('ws://127.0.0.1:3002');
+        socket.on('message',function (data) {
+            xiaqi(data.x,data.y,data.isWhite);
+        });
+
+        for(var i=0;i<25;i++){
+            context.strokeStyle="#000000";
+            context.moveTo(20+i*40,20);//垂直方向画15根线，相距30px;
+            context.lineTo(20+i*40,980);
+            context.stroke();
+            context.moveTo(20,20+i*40);//水平方向画15根线，相距30px;棋盘为14*14；
+            context.lineTo(980,20+i*40);
+            context.stroke();
+        }
+
+        myCanvas.onclick = function (e) {
+            var x = e.offsetX;
+            var y = e.offsetY;
+            var i = Math.floor(x/40);
+            var j = Math.floor(y/40);
+            socket.emit('chess',{x:i,y:j,isWhite:isWhite});
+            xiaqi(i,j,isWhite);
+            isWhite = !isWhite;
+        };
+
+        function xiaqi(x,y,isWhite) {
+            context.beginPath();
+            context.arc(20+x*40,20+y*40,13,0,2*Math.PI);
+            // context.fill();
+            if(isWhite == true){
+                context.fillStyle = 'white';
+                context.fill()
+            } else {
+                context.fillStyle = 'black';
+                context.fill();
+            }
+            context.stroke();
+            console.log(x,y);
+        }
+
+
+    })
+</script>
